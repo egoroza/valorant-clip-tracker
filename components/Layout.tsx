@@ -1,50 +1,36 @@
 import React, { ReactNode } from "react";
-import Header from "./Header";
+import Head from "next/head";
+import { Card, CardContent, Container, Typography } from "@mui/material";
 
 type Props = {
   children: ReactNode;
 };
 
 const Layout: React.FC<Props> = (props) => (
-  <div>
-    <Header />
-    <div className="layout">{props.children}</div>
+  <>
+    <Head>
+      <title>val clip tracker | topfra.gg</title>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+      />
+    </Head>
     <style jsx global>{`
-      html {
-        box-sizing: border-box;
-      }
-
-      *,
-      *:before,
-      *:after {
-        box-sizing: inherit;
-      }
-
       body {
-        margin: 0;
-        padding: 0;
-        font-size: 16px;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-          Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-          "Segoe UI Symbol";
-        background: rgba(0, 0, 0, 0.05);
-      }
-
-      input,
-      textarea {
-        font-size: 16px;
-      }
-
-      button {
-        cursor: pointer;
+        background-color: #eee;
       }
     `}</style>
-    <style jsx>{`
-      .layout {
-        padding: 0 2rem;
-      }
-    `}</style>
-  </div>
+    <Container maxWidth="lg">
+      <main>
+        <Typography variant="h5" component="div">
+          VALORANT Clip Tracker
+        </Typography>
+        <Card>
+          <CardContent>{props.children}</CardContent>
+        </Card>
+      </main>
+    </Container>
+  </>
 );
 
 export default Layout;
