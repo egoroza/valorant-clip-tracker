@@ -1,5 +1,6 @@
 import React from "react";
-import { Button } from "@mui/material";
+import { Button, ButtonGroup, Box } from "@mui/material";
+import FileUploadIcon from "@mui/icons-material/FileUpload";
 
 type UserProps = {
   name: string;
@@ -12,13 +13,24 @@ type Props = {
 
 const UsersList = ({ users }: Props) => {
   return (
-    <>
-      {users.map((user) => (
-        <Button key={user.id} href={`/user/${user.id}`}>
-          {user.name}
-        </Button>
-      ))}
-    </>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+      }}
+    >
+      <Button href="/">
+        <FileUploadIcon fontSize="small" />
+      </Button>
+      <ButtonGroup variant="text">
+        {users.map((user) => (
+          <Button key={user.id} href={`/user/${user.id}`}>
+            {user.name}
+          </Button>
+        ))}
+      </ButtonGroup>
+    </Box>
   );
 };
 
