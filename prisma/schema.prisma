@@ -1,0 +1,46 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = "postgres://rdvbhazbxrktks:5550d74308446ea09d8eacdbc12b097ea322473bcc27a2e9d45403ad41c19b93@ec2-54-208-139-247.compute-1.amazonaws.com:5432/d6m7jiip131uaj"
+}
+
+model Map {
+  id		  Int		@default(autoincrement()) @id
+  name		String
+  imgUrl	String
+  clips   Clip[]
+}
+
+model Weapon {
+  id		  Int		@default(autoincrement()) @id
+  name		String
+  imgUrl	String
+  clips   Clip[]
+}
+
+model Clip {
+  id		    Int		@default(autoincrement()) @id
+  title	  	String
+  clipUrl 	String
+  weapon	  Weapon? @relation(fields: [weaponId], references: [id])
+  map		    Map? @relation(fields: [mapId], references: [id])
+  author	  User @relation(fields: [authorId], references: [id])
+  authorId	Int
+  weaponId  Int
+  mapId     Int
+  videoUrl	String
+}
+
+model User {
+  id		  Int		  @default(autoincrement()) @id
+  name		String?
+  clips		Clip[]
+  imgUrl	String?
+  @@map(name: "users")
+}
