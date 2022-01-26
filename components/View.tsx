@@ -6,19 +6,28 @@ import {
   Typography,
   Autocomplete,
   Button,
-  Link,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogContentText,
   DialogActions,
+  CircularProgress,
+  Snackbar,
+  IconButton,
 } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 
 type Props = {
   users: UserProps[];
   weapons: WeaponProps[];
   maps: MapProps[];
 };
+
+const LoadingOverlay = () => (
+  <div style={{ display: "inline" }}>
+    <CircularProgress size="20px" />
+  </div>
+);
 
 const View = ({ users, weapons, maps }: Props) => {
   // states for uploading...
@@ -28,9 +37,11 @@ const View = ({ users, weapons, maps }: Props) => {
   const [user, setUser] = useState(users[0]);
   const [weapon, setWeapon] = useState(weapons[0]);
   const [map, setMap] = useState(maps[0]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [showUploadSuccess, setShowUploadSuccess] = useState(false);
 
   const [addUserModalOpen, setAddUserModalOpen] = useState(false);
-  const [userToAdd, setUserToAdd] = useState(null);
+  const [userToAdd, setUserToAdd] = useState("");
 
   const handleAddUserClickOpen = () => {
     setAddUserModalOpen(true);
@@ -48,8 +59,58 @@ const View = ({ users, weapons, maps }: Props) => {
     setClipUrl(e.target.value);
   };
 
-  const addUserToDatabase = (value) => {
-    console.log(value);
+  const handleAddUserChange = (e) => {
+    setUserToAdd(e.target.value);
+  };
+
+  const handleCloseUploadSuccess = () => {
+    setShowUploadSuccess(false);
+  };
+
+  const uploadSuccessAction = (
+    <>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleCloseUploadSuccess}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </>
+  );
+
+  const uploadClip = async (e: React.SyntheticEvent) => {
+    setIsLoading(true);
+    e.preventDefault();
+    try {
+      const body = { title, clipUrl, user, weapon, map };
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      if (response) {
+        setShowUploadSuccess(true);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+    setIsLoading(false);
+  };
+
+  const addUserToDatabase = async (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    try {
+      const body = { userToAdd };
+      const response = await fetch("/api/addUser", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+    } catch (error) {
+      console.error(error);
+    }
     setAddUserModalOpen(false);
   };
 
@@ -117,17 +178,20 @@ const View = ({ users, weapons, maps }: Props) => {
             renderInput={(params) => <TextField {...params} label="Map" />}
             value={map}
             onChange={(event, newValue) => {
+              console.log("new map value", newValue);
               setMap(newValue);
             }}
           />
         </div>
         <div style={{ margin: "20px" }}>
-          <Button
-            variant="contained"
-            onClick={() => console.log(title, clipUrl, user, weapon, map)}
-          >
+          <Button variant="contained" onClick={uploadClip}>
             Upload
           </Button>
+          {isLoading && (
+            <div style={{ display: "inline-block", marginLeft: "15px" }}>
+              <LoadingOverlay />
+            </div>
+          )}
         </div>
         <div style={{ margin: "20px" }}>
           <Button color="primary" onClick={handleAddUserClickOpen}>
@@ -147,12 +211,21 @@ const View = ({ users, weapons, maps }: Props) => {
               label="Username"
               fullWidth
               variant="standard"
+              value={userToAdd}
+              onChange={handleAddUserChange}
             />
           </DialogContent>
           <DialogActions>
             <Button onClick={addUserToDatabase}>Add User</Button>
           </DialogActions>
         </Dialog>
+        <Snackbar
+          open={showUploadSuccess}
+          autoHideDuration={6000}
+          onClose={handleCloseUploadSuccess}
+          message="Upload successful"
+          action={uploadSuccessAction}
+        />
       </Box>
     </div>
   );

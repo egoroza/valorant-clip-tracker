@@ -34,7 +34,6 @@ model Clip {
   authorId	Int
   weaponId  Int
   mapId     Int
-  videoUrl	String
 }
 
 model User {
