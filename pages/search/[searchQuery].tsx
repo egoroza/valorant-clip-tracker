@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useState, useEffect } from "react";
 import { GetServerSideProps } from "next";
 import Layout from "../../components/Layout";
@@ -21,6 +22,7 @@ type Props = {
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+  const searchQuery = params?.searchQuery;
   const usersList = await prisma.user.findMany({
     select: {
       id: true,
@@ -30,7 +32,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const clips = await prisma.clip.findMany({
     where: {
       title: {
-        contains: params?.searchQuery,
+        contains: searchQuery,
         mode: "insensitive",
       },
     },
@@ -43,7 +45,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     },
   });
   return {
-    props: { usersList, clips, searchQuery: params?.searchQuery },
+    props: { usersList, clips, searchQuery: searchQuery },
   };
 };
 

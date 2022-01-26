@@ -11,3 +11,4 @@ TODO:
 - Add Agents
 - Edge cases (i.e. requested user doesn't exist, etc.)
 - Lazy loading clips on client
+- Fix TS errors (remove // @ts-nocheck)
