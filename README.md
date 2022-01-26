@@ -1,6 +1,6 @@
 # VALORANT Clip Tracker
 
-An app to keep track of all your sick VAL plays.
+An app to keep track of all your sick VAL plays!
 
 TODO:
 
