@@ -43,7 +43,7 @@ const Layout: React.FC<Props> = (props) => {
           </div>
           <form
             onSubmit={() =>
-              Router.push("/search/[query]", `/search/${searchQuery}`)
+              Router.push("/search/[searchQuery]", `/search/${searchQuery}`)
             }
           >
             <Paper
