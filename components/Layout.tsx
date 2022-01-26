@@ -35,7 +35,7 @@ const Layout: React.FC<Props> = (props) => {
         <main>
           <div style={{ textAlign: "center" }}>
             <Image
-              src="/logo.png"
+              src="/Logo.png"
               alt="VALORANT Clip Tracker"
               width="800px"
               height="154px"
