@@ -1,5 +1,5 @@
 import React, { ReactNode, useState } from "react";
-import Router from "next/router";
+import { useRouter } from "next/router";
 import Head from "next/head";
 import { Card, CardContent, Container, Paper, InputBase } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
@@ -12,6 +12,7 @@ type Props = {
 
 const Layout: React.FC<Props> = (props) => {
   const [searchQuery, setSearchQuery] = useState("");
+  const router = useRouter();
 
   const handleSearchQueryUpdate = (e) => {
     setSearchQuery(e.target.value);
@@ -42,9 +43,10 @@ const Layout: React.FC<Props> = (props) => {
             />
           </div>
           <form
-            onSubmit={() =>
-              Router.push("/search/[query]", `/search/${searchQuery}`)
-            }
+            onSubmit={(e) => {
+              e.preventDefault();
+              router.push(`/search/${searchQuery}`);
+            }}
           >
             <Paper
               sx={{
