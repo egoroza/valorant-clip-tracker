@@ -12,3 +12,4 @@ TODO:
 - Fix TS errors (remove // @ts-nocheck)
 - Make responsive / mobile friendly
 - Images for weapons + maps, user image
+- Filter overall by weapon or map (instead of just by user)

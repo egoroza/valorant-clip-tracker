@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   TextField,
@@ -39,9 +39,15 @@ const View = ({ users, weapons, maps }: Props) => {
   const [map, setMap] = useState(maps[0]);
   const [isLoading, setIsLoading] = useState(false);
   const [showUploadSuccess, setShowUploadSuccess] = useState(false);
+  const [formHasError, setFormHasError] = useState(false);
 
   const [addUserModalOpen, setAddUserModalOpen] = useState(false);
   const [userToAdd, setUserToAdd] = useState("");
+
+  useEffect(() => {
+    if (title === "" || clipUrl === "") setFormHasError(true);
+    else setFormHasError(false);
+  }, [title, clipUrl]);
 
   const handleAddUserClickOpen = () => {
     setAddUserModalOpen(true);
@@ -135,6 +141,7 @@ const View = ({ users, weapons, maps }: Props) => {
             label="Title"
             value={title}
             onChange={handleTitleChange}
+            error={title === ""}
           />
         </div>
         <div>
@@ -144,6 +151,7 @@ const View = ({ users, weapons, maps }: Props) => {
             label="GDrive Clip URL"
             value={clipUrl}
             onChange={handleClipUrlChange}
+            error={clipUrl === ""}
           />
 
           <Autocomplete
@@ -184,7 +192,11 @@ const View = ({ users, weapons, maps }: Props) => {
           />
         </div>
         <div style={{ margin: "20px" }}>
-          <Button variant="contained" onClick={uploadClip}>
+          <Button
+            variant="contained"
+            onClick={uploadClip}
+            disabled={formHasError}
+          >
             Upload
           </Button>
           {isLoading && (
